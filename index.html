@@ -44,10 +44,29 @@
             }
         }
 
+        async function getAccessToken() {
+            const response = await fetch('https://auth.hyperverge.co/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    appId: 'ct4wfd',
+                    appKey: '424tdohz6d3hu7fj0u9l',
+                    expiry: '4800',
+                }),
+            });
+            const data = await response.json();
+            const token = data.result.token;
+            const formatedToken = token.replace("Bearer ", "");
+            console.log("formatedToken", formatedToken);
+            return formatedToken;
+        }
 
 
-        function startOnboarding() {
-            const accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdDR3ZmQiLCJ3b3JrZmxvd0lkIjoid29ya2Zsb3dfZWt5YyIsImFkbWluIjp0cnVlLCJpYXQiOjE3NTYzNjQxNzAsImV4cCI6MTc1NjM2Nzc3MH0.QzBq13GOSHKM8ew-4hOV8oqpjwRoJ3JH2HlFzjTjayM"
+
+        async function startOnboarding() {
+            const accessToken = await getAccessToken();
             const hyperKycConfig = new HyperKycConfig(
                 accessToken,
                 "workflow_ekyc",
