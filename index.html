@@ -49,11 +49,12 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Origin': 'https://kycexdt.netlify.app'
                 },
                 body: JSON.stringify({
                     appId: 'ct4wfd',
                     appKey: '424tdohz6d3hu7fj0u9l',
-                    expiry: '4800',
+                    expiry: 4800,
                 }),
             });
             const data = await response.json();
