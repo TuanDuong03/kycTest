@@ -49,9 +49,8 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Origin': 'https://kycexdt.netlify.app'
                 },
-                body: JSON.stringify({
+                body: JSON.stringify({  
                     appId: 'ct4wfd',
                     appKey: '424tdohz6d3hu7fj0u9l',
                     expiry: 4800,
@@ -70,8 +69,8 @@
             const accessToken = await getAccessToken();
             const hyperKycConfig = new HyperKycConfig(
                 accessToken,
-                "workflow_ekyc",
-                "TX_1756365267835",
+                // "workflow_ekyc",
+                // "TX_1756365267835",
                 true
             );
             console.log("hyperKycConfig", hyperKycConfig);
