@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://hv-camera-web-sg.s3-ap-southeast-1.amazonaws.com/hyperverge-web-sdk@9.15.2/src/sdk.min.js"></script>
+  </head>
+
+  <body>
+    <div style="position: fixed; top: 10%; left: 37%">
+      <div style="text-align: center">
+        <button type="button" onclick="starOnboarding();">
+          Start Onboarding
+        </button>
+      </div> 
+      <textarea
+        type="text"
+        id="myTextBox"
+        rows="50"
+        cols="50"
+        style="resize: both; margin-top: 1rem"
+      >
+      </textarea>
+    </div>
+  </body>
+  <script>
+    const textBox = document.getElementById("myTextBox");
+
+    function starOnboarding() {
+      const accessToken =
+        "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6ImN0NHdmZCIsImhhc2giOiJmYTg1ODY1NTg4MjliYzEwMDgzYTY0OTRjM2Q5NGM1MWY1NWM2YjM0ZDJmY2MyZmZjZmU3NDY4Y2EwNzk2MTBiIiwidHJhbnNhY3Rpb25JZCI6IndlYi1zZGstdGVzdC0wMiIsIndvcmtmbG93SWQiOiJ3b3JrZmxvd19la3ljIiwiaWF0IjoxNzU2NDU3Nzg5LCJleHAiOjE3NTY0NjEzODksImp0aSI6Ijk5NWMzNDViLTkxZTEtNDA4NC05ZDNmLWExOWZkNjk3ZmVkMiJ9.PqJL1FQYWP0l5pVGbbjD06f9gSBPDRvUGh7T3rdA1WcCdshnTFw6LfXUjfENbrOUlme5Kr43T2Q49V9ZIcev1Yje8-NcA3n6__nnKZqBYoGNc2JTWdeg8oAxMofF6kBzuZ1IsRVTxtIaWLcRekHxqa1iiR1k_mRePoEH8v7GjpI";
+
+      const hyperKycConfig = new HyperKycConfig(
+        accessToken
+      );
+
+      const languageToBeUsed = "en";
+      hyperKycConfig.setLanguageUsed(languageToBeUsed);
+
+      HyperKYCModule.launch(hyperKycConfig, handler);
+    }
+    const handler = (HyperKycResult) => {
+      textBox.value = JSON.stringify(HyperKycResult, null, 2);
+      switch (HyperKycResult.status) {
+        // ----Incomplete workflow-----
+        case "user_cancelled":
+          // <<Insert code block 1>>
+          break;
+        case "error":
+          // <<Insert code block 2>>
+          break;
+
+        // ----Complete workflow-----
+
+        case "auto_approved":
+          // <<Insert code block 3>>
+          break;
+        case "auto_declined":
+          // <<Insert code block 4>>
+          break;
+        case "needs_review":
+          // <<Insert code block 5>>
+          break;
+      }
+    };
+  </script>
+</html>
