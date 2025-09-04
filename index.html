@@ -29,13 +29,12 @@
       body: JSON.stringify({})
     });
     const data = await response.json();
-    console.log("data", data);
+    return data.result.authToken;
   }
 
-  function starOnboarding() {
-    getAuthToken();
-    const accessToken =
-      "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6ImN0NHdmZCIsImhhc2giOiJmYTg1ODY1NTg4MjliYzEwMDgzYTY0OTRjM2Q5NGM1MWY1NWM2YjM0ZDJmY2MyZmZjZmU3NDY4Y2EwNzk2MTBiIiwidHJhbnNhY3Rpb25JZCI6IlRYXzE3NTYyNzU5Mzc2ODMiLCJ3b3JrZmxvd0lkIjoid29ya2Zsb3dfZWt5YyIsImlhdCI6MTc1NjQ1ODc2NSwiZXhwIjoxNzU2NTAxOTY1LCJqdGkiOiI0NjhkYWEzOC1jZjhjLTQzZWEtOTQ1Yi1mZmFiZjljZjE1ZGYifQ.nr-oFyMmWaigr9jStyl6-u2If_8RJUJqI_rYn7xQUzf5p1ARG3wn1GnVnBV514gtoQ_Ev7o2YZMeCzO03SyKI9YdNaD0vsGth_AEHToUzhe_GOXopN18DSVZXVuOMLjtmJX5WBS-SBO_ml0JgbZ3DKEXwdNa5D5gkqlELEhDBdU";
+  async function starOnboarding() {
+    const authToken = await getAuthToken();
+    const accessToken = authToken;
 
     const hyperKycConfig = new HyperKycConfig(
       accessToken,
