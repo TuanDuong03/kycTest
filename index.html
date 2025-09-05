@@ -70,10 +70,10 @@
 
     HyperKYCModule.launch(hyperKycConfig, handler);
   }
-  const handler = (HyperKycResult) => {
+  const handler = async (HyperKycResult) => {
     textBox.value = JSON.stringify(HyperKycResult, null, 2);
     console.log(HyperKycResult);
-    saveKycResult({
+    await saveKycResult({
       cccd_id: HyperKycResult.details.idFrontIdNumber,
       status: HyperKycResult.status,
     })
