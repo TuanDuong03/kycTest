@@ -34,6 +34,28 @@
     return data.result.authToken;
   }
 
+  const saveKycResult = async ({
+    cccd_id,
+    status,
+  }) => {
+
+    const result = {
+      user_id: Math.floor(Math.random() * 1000000),
+      cccd_id,
+      status,
+    }
+
+    const response = await fetch(http + '/kyc/save-kyc-verification', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(result)
+    });
+    const data = await response.json();
+    return data;
+  }
+
   async function starOnboarding() {
     const authToken = await getAuthToken();
     const accessToken = authToken;
@@ -51,6 +73,10 @@
   const handler = (HyperKycResult) => {
     textBox.value = JSON.stringify(HyperKycResult, null, 2);
     console.log(HyperKycResult);
+    saveKycResult({
+      cccd_id: HyperKycResult.details.idFrontIdNumber,
+      status: HyperKycResult.status,
+    })
     switch (HyperKycResult.status) {
       // ----Incomplete workflow-----
       case "user_cancelled":
