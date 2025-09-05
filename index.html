@@ -20,8 +20,10 @@
 <script>
   const textBox = document.getElementById("myTextBox");
 
+  const http = "https://0692fed5da41.ngrok-free.app"
+
   const getAuthToken = async () => {
-    const response = await fetch('https://679e8d0dc2aa.ngrok-free.app/kyc/generate-kyc-token', {
+    const response = await fetch(http + '/kyc/generate-kyc-token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -48,6 +50,7 @@
   }
   const handler = (HyperKycResult) => {
     textBox.value = JSON.stringify(HyperKycResult, null, 2);
+    console.log(HyperKycResult);
     switch (HyperKycResult.status) {
       // ----Incomplete workflow-----
       case "user_cancelled":
