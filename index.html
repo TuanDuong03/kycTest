@@ -1,109 +1,105 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <script src="https://hv-camera-web-sg.s3-ap-southeast-1.amazonaws.com/hyperverge-web-sdk@9.15.2/src/sdk.min.js"></script>
+  </head>
 
-<head>
-  <script
-    src="https://hv-camera-web-sg.s3-ap-southeast-1.amazonaws.com/hyperverge-web-sdk@9.15.2/src/sdk.min.js"></script>
-</head>
-
-<body>
-  <div style="position: fixed; top: 10%; left: 37%">
-    <div style="text-align: center">
-      <button type="button" onclick="starOnboarding();">
-        Start Onboarding
-      </button>
-    </div>
-    <textarea type="text" id="myTextBox" rows="50" cols="50" style="resize: both; margin-top: 1rem">
+  <body>
+    <div style="position: fixed; top: 10%; left: 37%">
+      <div style="text-align: center">
+        <button type="button" onclick="starOnboarding();">
+          Start Onboarding
+        </button>
+      </div>
+      <textarea
+        type="text"
+        id="myTextBox"
+        rows="50"
+        cols="50"
+        style="resize: both; margin-top: 1rem"
+      >
       </textarea>
-  </div>
-</body>
-<script>
-  const textBox = document.getElementById("myTextBox");
+    </div>
+  </body>
+  <script>
+    const textBox = document.getElementById("myTextBox");
 
-  const http = "https://0692fed5da41.ngrok-free.app"
+    const http = "https://b52bb7f08b65.ngrok-free.app";
 
-  const getAuthToken = async () => {
-    const response = await fetch(http + '/kyc/generate-kyc-token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({})
-    });
-    const data = await response.json();
-    return data.result.authToken;
-  }
+    const getAuthToken = async () => {
+      const response = await fetch(http + "/kyc/generate-kyc-token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({}),
+      });
+      const data = await response.json();
+      return data.result.authToken;
+    };
 
-  const saveKycResult = async ({
-    cccd_number,
-    status,
-  }) => {
+    const saveKycResult = async ({ cccd_number, status }) => {
+      const result = {
+        user_id: Math.floor(Math.random() * 1000000),
+        cccd_number,
+        status,
+      };
 
-    const result = {
-      user_id: Math.floor(Math.random() * 1000000),
-      cccd_number,
-      status,
+      const response = await fetch(http + "/kyc/save-kyc-verification", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(result),
+      });
+      const data = await response.json();
+      return data;
+    };
+
+    async function starOnboarding() {
+      const authToken = await getAuthToken();
+      const accessToken = authToken;
+
+      const hyperKycConfig = new HyperKycConfig(accessToken, true);
+
+      const languageToBeUsed = "vi";
+      hyperKycConfig.setLanguageUsed(languageToBeUsed);
+
+      HyperKYCModule.launch(hyperKycConfig, handler);
     }
+    const handler = async (HyperKycResult) => {
+      textBox.value = JSON.stringify(HyperKycResult, null, 2);
+      console.log(HyperKycResult);
+      await saveKycResult({
+        cccd_number: HyperKycResult.details.idFrontIdNumber,
+        status: HyperKycResult.status,
+      });
+      switch (HyperKycResult.status) {
+        // ----Incomplete workflow-----
+        case "user_cancelled":
+          // <<Insert code block 1>>
+          console.log("user_cancelled");
+          break;
+        case "error":
+          // <<Insert code block 2>>
+          console.log("error");
+          break;
 
-    const response = await fetch(http + '/kyc/save-kyc-verification', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(result)
-    });
-    const data = await response.json();
-    return data;
-  }
+        // ----Complete workflow-----
 
-  async function starOnboarding() {
-    const authToken = await getAuthToken();
-    const accessToken = authToken;
-
-    const hyperKycConfig = new HyperKycConfig(
-      accessToken,
-      true
-    );
-
-    const languageToBeUsed = "vi";
-    hyperKycConfig.setLanguageUsed(languageToBeUsed);
-
-    HyperKYCModule.launch(hyperKycConfig, handler);
-  }
-  const handler = async (HyperKycResult) => {
-    textBox.value = JSON.stringify(HyperKycResult, null, 2);
-    console.log(HyperKycResult);
-    await saveKycResult({
-      cccd_number: HyperKycResult.details.idFrontIdNumber,
-      status: HyperKycResult.status,
-    })
-    switch (HyperKycResult.status) {
-      // ----Incomplete workflow-----
-      case "user_cancelled":
-        // <<Insert code block 1>>
-        console.log("user_cancelled");
-        break;
-      case "error":
-        // <<Insert code block 2>>
-        console.log("error");
-        break;
-
-      // ----Complete workflow-----
-
-      case "auto_approved":
-        // <<Insert code block 3>>
-        console.log("auto_approved");
-        break;
-      case "auto_declined":
-        // <<Insert code block 4>>
-        console.log("auto_declined");
-        break;
-      case "needs_review":
-        // <<Insert code block 5>>
-        console.log("needs_review");
-        break;
-    }
-  };
-</script>
-
+        case "auto_approved":
+          // <<Insert code block 3>>
+          console.log("auto_approved");
+          break;
+        case "auto_declined":
+          // <<Insert code block 4>>
+          console.log("auto_declined");
+          break;
+        case "needs_review":
+          // <<Insert code block 5>>
+          console.log("needs_review");
+          break;
+      }
+    };
+  </script>
 </html>
