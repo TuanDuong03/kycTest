@@ -35,13 +35,13 @@
   }
 
   const saveKycResult = async ({
-    cccd_id,
+    cccd_number,
     status,
   }) => {
 
     const result = {
       user_id: Math.floor(Math.random() * 1000000),
-      cccd_id,
+      cccd_number,
       status,
     }
 
@@ -74,7 +74,7 @@
     textBox.value = JSON.stringify(HyperKycResult, null, 2);
     console.log(HyperKycResult);
     await saveKycResult({
-      cccd_id: HyperKycResult.details.idFrontIdNumber,
+      cccd_number: HyperKycResult.details.idFrontIdNumber,
       status: HyperKycResult.status,
     })
     switch (HyperKycResult.status) {
