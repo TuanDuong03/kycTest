@@ -65,16 +65,14 @@
       }
 
       const transactionId = generateTransactionId();
-      const customerId = generateCustomerId();
-
       const response = await fetch(http + "/kyc/generate-kyc-token", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          transactionId,
-          email,
+          transaction_id: transactionId,
+          email: email,
         }),
       });
       const data = await response.json();
