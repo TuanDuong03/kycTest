@@ -79,10 +79,11 @@
       return data.result.authToken;
     };
 
-    const saveKycResult = async ({transaction_id, customer_id}) => {
+    const saveKycResult = async ({transaction_id, customer_id, lastest_module}) => {
       const result = {
         transaction_id,
         customer_id,
+        lastest_module
       };
 
       const response = await fetch(http + "/kyc/save-kyc-verification", {
@@ -114,6 +115,7 @@
       await saveKycResult({
         transaction_id: HyperKycResult.transactionId,
         customer_id: customer_id,
+        lastest_module: HyperKycResult.latestModule ?? ""
       });
       switch (HyperKycResult.status) {
         // ----Incomplete workflow-----
