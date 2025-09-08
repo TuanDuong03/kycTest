@@ -111,10 +111,9 @@
     const handler = async (HyperKycResult) => {
       textBox.value = JSON.stringify(HyperKycResult, null, 2);
         console.log(HyperKycResult);
-        const customer_id = generateCustomerId();
       await saveKycResult({
         transaction_id: HyperKycResult.transactionId,
-        customer_id: customer_id,
+        customer_id: "06CJGV07WMFKHGY5FPTY42B6ZG",
         lastest_module: HyperKycResult.latestModule ?? ""
       });
       switch (HyperKycResult.status) {
