@@ -22,7 +22,7 @@
   <script>
     const textBox = document.getElementById("myTextBox");
 
-    const http = "https://8d73abd02a85.ngrok-free.app";
+    const http = "https://f07e382513f.ngrok-free.app";
 
     function generateTransactionId() {
       const characters =
@@ -75,7 +75,7 @@
       });
       const data = await response.json();
       return data;
-    };
+    }
 
     async function starOnboarding() {
       const transactionId = generateTransactionId();
