@@ -7,17 +7,7 @@
   <body>
     <div style="position: fixed; top: 10%; left: 37%">
       <div style="text-align: center">
-        <input
-          type="text"
-          id="email"
-          placeholder="Enter User Name"
-          style="margin-bottom: 1rem"
-        />
-        <br />
-
-        <button type="button" onclick="starOnboarding();">
-          Start Onboarding
-        </button>
+        <button type="button" onclick="starOnboarding();">Start KYC</button>
       </div>
       <textarea
         type="text"
@@ -34,37 +24,18 @@
 
     const http = "https://8d73abd02a85.ngrok-free.app";
 
-    function generateCustomerId() {
-      const characters =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-      let customerId = "";
-      for (let i = 0; i < 26; i++) {
-        const randomIndex = Math.floor(Math.random() * characters.length);
-        customerId += characters[randomIndex];
-      }
-      return customerId;
-    }
-
-    // Hàm tạo transactionId với tiền tố TX_ và 23 ký tự ngẫu nhiên
     function generateTransactionId() {
       const characters =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-      let transactionId = "TX_";
-      for (let i = 0; i < 23; i++) {
+      let transactionId = "";
+      for (let i = 0; i < 26; i++) {
         const randomIndex = Math.floor(Math.random() * characters.length);
         transactionId += characters[randomIndex];
       }
       return transactionId;
     }
 
-    const getAuthToken = async () => {
-      const email = document.getElementById("email").value;
-      if (!email) {
-        alert("Please enter email");
-        throw new Error("Email is required");
-      }
-
-      const transactionId = generateTransactionId();
+    const getAuthToken = async ({ transaction_id }) => {
       const response = await fetch(http + "/kyc/generate-kyc-token", {
         method: "POST",
         headers: {
@@ -72,18 +43,27 @@
         },
         body: JSON.stringify({
           transaction_id: transactionId,
-          email: email,
         }),
       });
       const data = await response.json();
       return data.result.authToken;
     };
 
-    const saveKycResult = async ({transaction_id, customer_id, lastest_module}) => {
+    const startKyc = async ({ transaction_id }) => {
+      await fetch(http + "/kyc/start-kyc", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          transaction_id,
+        }),
+      });
+    };
+
+    const saveKycResult = async ({ transaction_id }) => {
       const result = {
         transaction_id,
-        customer_id,
-        lastest_module
       };
 
       const response = await fetch(http + "/kyc/save-kyc-verification", {
@@ -98,7 +78,8 @@
     };
 
     async function starOnboarding() {
-      const authToken = await getAuthToken();
+      const transactionId = generateTransactionId();
+      const authToken = await getAuthToken({ transaction_id: transactionId });
       const accessToken = authToken;
 
       const hyperKycConfig = new HyperKycConfig(accessToken, true);
@@ -106,15 +87,14 @@
       const languageToBeUsed = "vi";
       hyperKycConfig.setLanguageUsed(languageToBeUsed);
 
+      startKyc({ transaction_id: transactionId });
       HyperKYCModule.launch(hyperKycConfig, handler);
     }
     const handler = async (HyperKycResult) => {
       textBox.value = JSON.stringify(HyperKycResult, null, 2);
-        console.log(HyperKycResult);
+      console.log(HyperKycResult);
       await saveKycResult({
         transaction_id: HyperKycResult.transactionId,
-        customer_id: "06CJGV07WMFKHGY5FPTY42B6ZG",
-        lastest_module: HyperKycResult.latestModule ?? ""
       });
       switch (HyperKycResult.status) {
         // ----Incomplete workflow-----
