@@ -49,18 +49,6 @@
       return data.result.authToken;
     };
 
-    const startKyc = async ({ transaction_id }) => {
-      await fetch(http + "/kyc/start-kyc", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          transaction_id,
-        }),
-      });
-    };
-
     const saveKycResult = async ({ transaction_id }) => {
       const result = {
         transaction_id,
@@ -87,7 +75,6 @@
       const languageToBeUsed = "vi";
       hyperKycConfig.setLanguageUsed(languageToBeUsed);
 
-      startKyc({ transaction_id: transactionId });
       HyperKYCModule.launch(hyperKycConfig, handler);
     }
     const handler = async (HyperKycResult) => {
