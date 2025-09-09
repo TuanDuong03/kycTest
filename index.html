@@ -54,7 +54,7 @@
         transaction_id,
       };
 
-      const response = await fetch(http + "/kyc/save-kyc-verification", {
+      const response = await fetch(http + "/kyc/store-kyc", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -68,6 +68,7 @@
     async function starOnboarding() {
       const transactionId = generateTransactionId();
       const authToken = await getAuthToken({ transaction_id: transactionId });
+       console.log("Auth Token:", authToken);
       const accessToken = authToken;
 
       const hyperKycConfig = new HyperKycConfig(accessToken, true);
