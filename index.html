@@ -24,19 +24,7 @@
 
     const http = "https://236c984b5c80.ngrok-free.app";
 
-    function generateTransactionId() {
-      const characters =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-      let transactionId = "";
-      for (let i = 0; i < 26; i++) {
-        const randomIndex = Math.floor(Math.random() * characters.length);
-        transactionId += characters[randomIndex];
-      }
-      return transactionId;
-    }
-
-    const getAuthToken = async ({ transaction_id }) => {
-       console.log("Transaction ID:", transaction_id);
+    const getAuthToken = async () => {
       const response = await fetch(http + "/kyc/generate-kyc-token", {
         method: "POST",
         headers: {
@@ -48,7 +36,7 @@
       });
       const data = await response.json();
        console.log("Response Data:", data);
-      return data.data.authToken;
+      return data.response.authToken;
     };
 
     const saveKycResult = async ({ transaction_id }) => {
@@ -66,8 +54,7 @@
     }
 
     async function starOnboarding() {
-      const transactionId = generateTransactionId();
-      const authToken = await getAuthToken({ transaction_id: transactionId });
+      const authToken = await getAuthToken();
        console.log("Auth Token:", authToken);
       const accessToken = authToken;
 
