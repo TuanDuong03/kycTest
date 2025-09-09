@@ -46,7 +46,7 @@
         }),
       });
       const data = await response.json();
-      return data.result.authToken;
+      return data.authToken;
     };
 
     const saveKycResult = async ({ transaction_id }) => {
