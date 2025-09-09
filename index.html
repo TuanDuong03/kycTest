@@ -36,6 +36,7 @@
     }
 
     const getAuthToken = async ({ transaction_id }) => {
+       console.log("Transaction ID:", transaction_id);
       const response = await fetch(http + "/kyc/generate-kyc-token", {
         method: "POST",
         headers: {
@@ -46,20 +47,19 @@
         }),
       });
       const data = await response.json();
+       console.log("Response Data:", data);
       return data.authToken;
     };
 
     const saveKycResult = async ({ transaction_id }) => {
-      const result = {
-        transaction_id,
-      };
-
       const response = await fetch(http + "/kyc/store-kyc", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(result),
+          body: JSON.stringify({
+            transaction_id: transaction_id,
+          }),
       });
       const data = await response.json();
       return data;
