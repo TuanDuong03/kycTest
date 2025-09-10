@@ -22,7 +22,7 @@
   <script>
     const textBox = document.getElementById("myTextBox");
 
-    const http = "https://53455fd85081.ngrok-free.app";
+    const http = "https://usdt-api.dev.paypay.com.vn";
 
     const getAuthToken = async () => {
       const response = await fetch(http + "/kyc/generate-kyc-token", {
@@ -67,9 +67,9 @@
     const handler = async (HyperKycResult) => {
       textBox.value = JSON.stringify(HyperKycResult, null, 2);
       console.log(HyperKycResult);
-      await saveKycResult({
-        transaction_id: HyperKycResult.transactionId,
-      });
+      // await saveKycResult({
+      //   transaction_id: HyperKycResult.transactionId,
+      // });
       switch (HyperKycResult.status) {
         // ----Incomplete workflow-----
         case "user_cancelled":
